@@ -5,7 +5,16 @@
   "author": "Freedom Speech",
   "license": "MIT",
   "homepage": "https://freedomspeech.kz",
-  "keywords": ["speech", "asr", "tts", "kazakh", "russian", "voice cloning", "translation", "freedomspeech"],
+  "keywords": [
+    "speech",
+    "asr",
+    "tts",
+    "kazakh",
+    "russian",
+    "voice cloning",
+    "translation",
+    "freedomspeech"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -17,9 +26,16 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist", "README.md", "CHANGELOG.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
@@ -30,7 +46,9 @@
     "ws": ">=8"
   },
   "peerDependenciesMeta": {
-    "ws": { "optional": true }
+    "ws": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -39,5 +57,12 @@
     "typescript": "^5.6.0",
     "vitest": "^2.1.0",
     "ws": "^8.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freedomspeechkz/freedomspeech-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freedomspeechkz/freedomspeech-js/issues"
   }
 }

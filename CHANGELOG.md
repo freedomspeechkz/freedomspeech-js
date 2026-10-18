@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-10-18)
+
+- Адрес API по умолчанию: `https://api.freedomspeech.kz`. На нём работают ключи из кабинета console.freedomspeech.kz (раньше по умолчанию был `https://freedomspeech.kz`, где такие ключи получали 401). / Default base URL is now `https://api.freedomspeech.kz`, where console keys work.
+- На новом адресе опубликованы распознавание, синтез и оба WebSocket. Клонирование, voice design, перевод, каталог голосов и health там пока не опубликованы (404), ключам кабинета недоступны; пометки в JSDoc. `baseUrl` и `FS_BASE_URL` переопределяют адрес. / Cloning, voice design, translation, voice catalog and health are not yet published on the new host; override with `baseUrl` or `FS_BASE_URL`.
+
 ## 0.1.0 (2026-10-17)
 
 Первый выпуск. / First release.

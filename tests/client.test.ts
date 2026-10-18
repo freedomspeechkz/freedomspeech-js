@@ -65,7 +65,7 @@ describe("key and headers", () => {
     expect(voices[0].id).toBe("tomiris");
     expect(voices[0].type).toBe("builtin");
     expect(ff.last.headers["X-API-Key"]).toBeUndefined();
-    expect(ff.last.url).toBe("https://freedomspeech.kz/api/voices");
+    expect(ff.last.url).toBe("https://api.freedomspeech.kz/api/voices");
   });
 
   it("voices accepts wrapped list", async () => {
@@ -172,7 +172,7 @@ describe("transcribe", () => {
     expect(r.language).toBe("kk");
     expect(r.segments).toEqual([]);
     expect(ff.last.method).toBe("POST");
-    expect(ff.last.url).toBe("https://freedomspeech.kz/v1/audio/transcriptions");
+    expect(ff.last.url).toBe("https://api.freedomspeech.kz/v1/audio/transcriptions");
     expect(ff.last.headers["Content-Type"]).toBeUndefined(); // boundary ставит fetch
     const f = await formEntries(ff.last.form);
     const file = f.file[0] as File;
@@ -239,7 +239,7 @@ describe("speak", () => {
     ff.bytes(200, WAV);
     const out = await client.speak("Сәлем <pause> қош келдіңіз", { voice: "Tomiris", language: "kk", emotion: "happy" });
     expect(out).toEqual(WAV);
-    expect(ff.last.url).toBe("https://freedomspeech.kz/v1/audio/speech");
+    expect(ff.last.url).toBe("https://api.freedomspeech.kz/v1/audio/speech");
     expect(ff.last.headers["Content-Type"]).toBe("application/json");
     expect(ff.last.json).toEqual({ input: "Сәлем <pause> қош келдіңіз", voice: "Tomiris", language: "kk", emotion: "happy" });
   });
@@ -270,7 +270,7 @@ describe("voices and cloning", () => {
     ff.bytes(200, WAV);
     const out = await client.cloneVoice("Сәлеметсіз бе", { referenceAudio: WAV, filename: "me.wav", language: "kk", speed: 1.2 });
     expect(out).toEqual(WAV);
-    expect(ff.last.url).toBe("https://freedomspeech.kz/api/voice-clone");
+    expect(ff.last.url).toBe("https://api.freedomspeech.kz/api/voice-clone");
     const f = await formEntries(ff.last.form);
     expect(f.text).toEqual(["Сәлеметсіз бе"]);
     expect(f.language).toEqual(["kk"]);
@@ -306,7 +306,7 @@ describe("voices and cloning", () => {
       ],
     });
     const variants = await client.cloneVoiceVariants("Сәлем", { referenceAudio: new Uint8Array([1, 2]), filename: "ref.wav" });
-    expect(ff.last.url).toBe("https://freedomspeech.kz/api/voice-clone?variants=all");
+    expect(ff.last.url).toBe("https://api.freedomspeech.kz/api/voice-clone?variants=all");
     expect(variants.map((v) => v.engine)).toEqual(["omnivoice", "flash"]);
     expect(variants[0].wav).toEqual(WAV);
   });

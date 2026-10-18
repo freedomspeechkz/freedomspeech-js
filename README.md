@@ -1,8 +1,8 @@
 # freedomspeech
 
-JavaScript/TypeScript SDK для API [Freedom Speech](https://freedomspeech.kz): распознавание и синтез казахской, русской и английской речи, клонирование голоса, перевод. Документация API: <https://freedomspeech.kz/docs>.
+JavaScript/TypeScript SDK для API [Freedom Speech](https://api.freedomspeech.kz): распознавание и синтез казахской, русской и английской речи, клонирование голоса, перевод. Документация API: <https://freedomspeech.kz/docs>.
 
-JavaScript/TypeScript SDK for the [Freedom Speech](https://freedomspeech.kz) API: Kazakh, Russian and English speech recognition and synthesis, voice cloning, translation. API reference: <https://freedomspeech.kz/docs>. English section below.
+JavaScript/TypeScript SDK for the [Freedom Speech](https://api.freedomspeech.kz) API: Kazakh, Russian and English speech recognition and synthesis, voice cloning, translation. API reference: <https://freedomspeech.kz/docs>. English section below.
 
 Работает в Node 18+ и в браузере. ESM и CommonJS, типы в комплекте. Зависимостей нет; для WebSocket в Node 18 и 20 нужен пакет `ws` (в Node 22+ и в браузере используется встроенный WebSocket).
 
@@ -60,7 +60,7 @@ const { FreedomSpeech } = require("freedomspeech");
 
 ```html
 <script type="module">
-  import { FreedomSpeech, pcm16ToWav, concatBytes } from "https://cdn.jsdelivr.net/npm/freedomspeech@0.1.0/dist/index.js";
+  import { FreedomSpeech, pcm16ToWav, concatBytes } from "https://cdn.jsdelivr.net/npm/freedomspeech@0.1.1/dist/index.js";
 
   const fs = new FreedomSpeech({ apiKey: "<ключ>" });
 
@@ -110,13 +110,15 @@ const { FreedomSpeech } = require("freedomspeech");
 ```ts
 const fs = new FreedomSpeech({
   apiKey: undefined,                       // или FS_API_KEY (Node)
-  baseUrl: "https://freedomspeech.kz",
+  baseUrl: "https://api.freedomspeech.kz",
   timeoutMs: 60_000,
   bearerAuth: false,                       // дополнительно слать Authorization: Bearer
   fetch: undefined,                        // своя реализация fetch
   webSocket: undefined,                    // свой конструктор WebSocket
 });
 ```
+
+Ключ из кабинета console.freedomspeech.kz работает на https://api.freedomspeech.kz, это адрес по умолчанию с версии 0.1.1. На этом адресе опубликованы распознавание (`transcribe`, `streamTranscribe`) и синтез (`speak`, `streamSpeech`). Клонирование голоса, voice design, перевод, каталог голосов и `health` на нём пока не опубликованы (бэкенд в работе) и ключам кабинета недоступны; для другого адреса передайте `baseUrl` или задайте `FS_BASE_URL`.
 
 HTTP-запросы идут с заголовком `X-API-Key`, WebSocket открывается с `?apiKey=`. Флаг `bearerAuth: true` дополнительно добавляет `Authorization: Bearer`; публичная документация описывает только `X-API-Key`, флаг нужен для прокси. Публичные вызовы `voices()`, `languages()`, `health()` работают без ключа.
 

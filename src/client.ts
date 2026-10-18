@@ -45,7 +45,7 @@ import {
 } from "./streaming.js";
 import { VERSION } from "./version.js";
 
-export const DEFAULT_BASE_URL = "https://freedomspeech.kz";
+export const DEFAULT_BASE_URL = "https://api.freedomspeech.kz";
 export const ENV_API_KEY = "FS_API_KEY";
 export const ENV_BASE_URL = "FS_BASE_URL";
 export const DEFAULT_TIMEOUT_MS = 60_000;
@@ -63,7 +63,12 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 export interface FreedomSpeechOptions {
   /** Ключ API. Если не задан, берётся из переменной окружения `FS_API_KEY` (только Node). */
   apiKey?: string;
-  /** Адрес API, по умолчанию `https://freedomspeech.kz` (или `FS_BASE_URL`). */
+  /**
+   * Адрес API, по умолчанию `https://api.freedomspeech.kz` (или `FS_BASE_URL`). Ключ из кабинета
+   * console.freedomspeech.kz работает на этом адресе: распознавание, синтез и оба WebSocket.
+   * Клонирование, voice design, перевод, каталог голосов и health на нём пока не опубликованы
+   * (бэкенд в работе), ключам кабинета недоступны; для другого ключа и адреса задайте свой `baseUrl`.
+   */
   baseUrl?: string;
   /** Таймаут HTTP-запроса и ожидания кадра по WebSocket, мс. По умолчанию 60 000. */
   timeoutMs?: number;
@@ -449,7 +454,7 @@ export class FreedomSpeech {
 
   // ------------------------------------------------------------------ голоса
 
-  /** Список голосов: `GET /api/voices`, без ключа. / List catalog voices. */
+  /** Список голосов: `GET /api/voices`, без ключа. / List catalog voices. На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`. */
   async voices(): Promise<Voice[]> {
     let data = await this.json(await this.request("GET", "/api/voices", { auth: false }));
     if (data && typeof data === "object" && !Array.isArray(data)) {
@@ -461,6 +466,7 @@ export class FreedomSpeech {
 
   /**
    * Готовый образец голоса каталога: `GET /api/voices/{id}/preview`, WAV. / Catalog voice preview.
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * У встроенных голосов образца нет (404): озвучьте фразу через `speak`.
    */
   async voicePreview(voiceId: string): Promise<Uint8Array> {
@@ -470,6 +476,7 @@ export class FreedomSpeech {
 
   /**
    * Озвучить текст голосом из записи или голосом каталога: `POST /api/voice-clone`, в ответ WAV.
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * Clone a voice from a reference recording (or catalog voice) and speak the text.
    * Нужно ровно одно из `referenceAudio` и `voiceId`.
    */
@@ -481,6 +488,7 @@ export class FreedomSpeech {
 
   /**
    * То же, что `cloneVoice`, но `?variants=all`: результат каждого движка (`omnivoice`, `flash`).
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * Упавший движок в списке отсутствует; 502 приходит, только если упали все.
    */
   async cloneVoiceVariants(text: string, opts: CloneVoiceOptions): Promise<CloneVariant[]> {
@@ -495,6 +503,7 @@ export class FreedomSpeech {
 
   /**
    * Создать голос по описанию и озвучить им текст: `POST /api/voice-design`.
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * Design a voice from a text description and speak the text with it.
    * `instruct`: описание голоса; по документации лучше работает по-английски, казахское описание
    * сервер переводит сам. Стоит указать пол, возраст, высоту, темп, эмоцию, тембр, сценарий.
@@ -522,6 +531,7 @@ export class FreedomSpeech {
 
   /**
    * Перевести строки между kk, ru, en: `POST /v2/translate`. / Translate up to 50 strings.
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * Порядок и число результатов совпадают с входом. `detectedSourceLanguage` заполнено,
    * только если `sourceLang` не передан.
    */
@@ -533,14 +543,14 @@ export class FreedomSpeech {
     return (Array.isArray(items) ? items : []).filter((t): t is Json => !!t && typeof t === "object").map(translationFromJson);
   }
 
-  /** Определить язык строк: `POST /v2/detect`. / Detect the language of up to 50 strings. */
+  /** Определить язык строк: `POST /v2/detect`. / Detect the language of up to 50 strings. На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`. */
   async detectLanguage(text: string | string[]): Promise<Detection[]> {
     const data = await this.json(await this.request("POST", "/v2/detect", { json: { text } }));
     const items = data && typeof data === "object" ? (data as Json).detections : [];
     return (Array.isArray(items) ? items : []).filter((t): t is Json => !!t && typeof t === "object").map(detectionFromJson);
   }
 
-  /** Языки перевода: `GET /v2/languages`, без ключа. / Supported translation languages. */
+  /** Языки перевода: `GET /v2/languages`, без ключа. / Supported translation languages. На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`. */
   async languages(): Promise<Json> {
     return (await this.json(await this.request("GET", "/v2/languages", { auth: false }))) as Json;
   }
@@ -549,6 +559,7 @@ export class FreedomSpeech {
 
   /**
    * Состояние распознавания: `GET /api/asr/health`, без ключа. / ASR service health.
+   * На адресе по умолчанию `https://api.freedomspeech.kz` маршрут пока не опубликован (404), ключам кабинета недоступен; нужен свой `baseUrl`.
    * При 503 бросает `FreedomSpeechError` с телом `{"status": "unavailable", ...}`.
    */
   async health(): Promise<Json> {

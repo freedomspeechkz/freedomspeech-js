@@ -1,6 +1,6 @@
 {
   "name": "freedomspeech",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript/TypeScript SDK for the Freedom Speech API: Kazakh, Russian and English speech recognition, synthesis, voice cloning and translation",
   "author": "Freedom Speech",
   "license": "MIT",

@@ -42,7 +42,7 @@ describe("ASR", () => {
     const t0 = Date.now();
     const events = await collect(client().streamTranscribe(pcm16Frames(pcm, 100), { prettify: false, realtime: true, finalTimeoutMs: 5000 }));
     expect(Date.now() - t0).toBeLessThan(3000); // закончили по final после stop, не по finalTimeout
-    expect(ws().url).toBe("wss://freedomspeech.kz/ws/asr?apiKey=k&prettify=false");
+    expect(ws().url).toBe("wss://api.freedomspeech.kz/ws/asr?apiKey=k&prettify=false");
     expect(events.map((e) => e.type)).toEqual(["partial", "final", "final"]);
     expect(events[0].isFinal).toBe(false);
     expect(events[1].isFinal).toBe(true);
@@ -61,7 +61,7 @@ describe("ASR", () => {
     }
     const events = await collect(client().streamTranscribe(frames(), { finalTimeoutMs: 100 }));
     expect(events).toEqual([]);
-    expect(ws().url).toBe("wss://freedomspeech.kz/ws/asr?apiKey=k");
+    expect(ws().url).toBe("wss://api.freedomspeech.kz/ws/asr?apiKey=k");
     expect(ws().sentBytes().byteLength).toBe(6400);
   });
 
@@ -159,7 +159,7 @@ describe("TTS", () => {
     ];
     const chunks = await collect(client().streamSpeech("Сәлем", { voice: "tomiris", language: "kk", requestId: "r1" }));
     expect(chunks).toEqual([a, b]);
-    expect(ws().url).toBe("wss://freedomspeech.kz/ws/tts?apiKey=k");
+    expect(ws().url).toBe("wss://api.freedomspeech.kz/ws/tts?apiKey=k");
     expect(ws().sentJson()[0]).toEqual({ type: "synthesize", text: "Сәлем", requestId: "r1", voice: "tomiris", model: "freedomspeech-flash", language: "kk" });
     expect(ws().closed).toBe(true);
     const wav = pcm16ToWav(concatBytes(chunks), TTS_SAMPLE_RATE);

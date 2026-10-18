@@ -1,0 +1,43 @@
+{
+  "name": "freedomspeech",
+  "version": "0.1.0",
+  "description": "JavaScript/TypeScript SDK for the Freedom Speech API: Kazakh, Russian and English speech recognition, synthesis, voice cloning and translation",
+  "author": "Freedom Speech",
+  "license": "MIT",
+  "homepage": "https://freedomspeech.kz",
+  "keywords": ["speech", "asr", "tts", "kazakh", "russian", "voice cloning", "translation", "freedomspeech"],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "CHANGELOG.md", "LICENSE"],
+  "sideEffects": false,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+  },
+  "peerDependencies": {
+    "ws": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "ws": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.12",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "ws": "^8.18.0"
+  }
+}
